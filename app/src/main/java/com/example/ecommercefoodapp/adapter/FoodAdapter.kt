@@ -1,4 +1,4 @@
-package com.example.ecommercefoodapp
+package com.example.ecommercefoodapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ecommercefoodapp.R
+import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
 
-class FoodAdapter (private val itemsList: ArrayList<FoodItemModel>, private val context: Context): RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
+class FoodAdapter (private val itemsList: List<FoodItemEntity>, private val context: Context): RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,7 +33,7 @@ class FoodAdapter (private val itemsList: ArrayList<FoodItemModel>, private val 
         private val price: TextView = itemView.findViewById(R.id.price)
         private val image: ImageView = itemView.findViewById(R.id.image)
 
-        fun bind(item: FoodItemModel) {
+        fun bind(item: FoodItemEntity) {
             title.text = item.title
             price.text = item.price
             Glide.with(context)
