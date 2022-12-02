@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface FoodAPI {
     @GET("/catacretu/eCommerceData/main/FoodData")
-    fun getFood(): Single<List<FoodItemEntity>>
+    fun getFood(): Single<List<FoodItemResponse>>
 }
