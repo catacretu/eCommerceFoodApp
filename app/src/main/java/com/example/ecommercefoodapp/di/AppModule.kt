@@ -1,6 +1,5 @@
-package com.example.ecommercefoodapp.DI
+package com.example.ecommercefoodapp.di
 
-import android.app.Application
 import android.content.Context
 import com.example.ecommercefoodapp.data.database.AppDatabase
 import com.example.ecommercefoodapp.data.local.dao.FoodDAO
@@ -15,7 +14,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -30,7 +28,7 @@ object AppModule {
     @Provides
     @ViewModelScoped
     fun providesFoodDao(appDatabase: AppDatabase): FoodDAO {
-        return  appDatabase.getFoodDAO()
+        return appDatabase.getFoodDAO()
     }
 
     @ViewModelScoped
@@ -40,17 +38,16 @@ object AppModule {
     @ViewModelScoped
     @Provides
     fun providesFoodAPI(
-        remoteDataSource: RemoteDataSource,
-        @ApplicationContext context: Context
+        remoteDataSource: RemoteDataSource
     ): FoodAPI {
         return remoteDataSource.buildApi(
             FoodAPI::class.java,
-            context
         )
     }
+
     @ViewModelScoped
     @Provides
-    fun providesFoodRepository(foodAPI: FoodAPI,foodDAO: FoodDAO): FoodRepository {
-        return FoodRepositoryImpl(foodAPI,foodDAO)
+    fun providesFoodRepository(foodAPI: FoodAPI, foodDAO: FoodDAO): FoodRepository {
+        return FoodRepositoryImpl(foodAPI, foodDAO)
     }
 }

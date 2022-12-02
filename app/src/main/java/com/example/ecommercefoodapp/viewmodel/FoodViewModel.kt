@@ -8,12 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FoodViewModel @Inject constructor(private val repository: FoodRepository)
-    : ViewModel() {
+class FoodViewModel @Inject constructor(private val repository: FoodRepository) : ViewModel() {
 
-        var foodData: MutableLiveData<List<FoodItemEntity>> = MutableLiveData()
+    private var foodData: MutableLiveData<List<FoodItemEntity>> = MutableLiveData()
 
-    init{
+    init {
         loadFoodData()
     }
 

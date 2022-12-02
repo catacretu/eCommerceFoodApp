@@ -1,7 +1,7 @@
 package com.example.ecommercefoodapp.screens
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.ecommercefoodapp.R
 import dagger.hilt.android.AndroidEntryPoint
 
