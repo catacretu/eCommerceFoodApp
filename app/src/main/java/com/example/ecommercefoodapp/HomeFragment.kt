@@ -5,15 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ecommercefoodapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -27,26 +20,26 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = GridLayoutManager(activity,2)
 
-        binding.composeView.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MaterialTheme {
-                    Button(onClick = {
-                        val action = HomeFragmentDirections.goToProductDetailsFragment()
-                        findNavController().navigate(action) },
-                        colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.Red
-                    ))
-                    {
-                     Text("Click")
-                    }
-                }
-            }
+        //populate food items list
+        val dataList = ArrayList<FoodItemModel>()
+        for(i in 1 .. 10)
+            dataList.add(
+                FoodItemModel(
+                    "Food $i",
+                    "10$",
+                    "https://www.bacanialuitomita.ro/wp-content/uploads/2020/11/124803226_4604318162943378_2793598950690771519_o.jpg"
+                )
+            )
+        val foodAdapter = FoodAdapter(dataList, view.context)
+        recyclerView.adapter = foodAdapter
+        return view
+    }
 
-            return view
-        }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

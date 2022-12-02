@@ -1,0 +1,42 @@
+package com.example.ecommercefoodapp
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+
+class FoodAdapter (private val itemsList: ArrayList<FoodItemModel>, private val context: Context): RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_view, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+     val item = itemsList[position]
+     holder.bind(item)
+    }
+
+    override fun getItemCount(): Int {
+        return itemsList.size
+    }
+
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        private val title: TextView = itemView.findViewById(R.id.title)
+        private val price: TextView = itemView.findViewById(R.id.price)
+        private val image: ImageView = itemView.findViewById(R.id.image)
+
+        fun bind(item: FoodItemModel) {
+            title.text = item.title
+            price.text = item.price
+            Glide.with(context)
+                .load(item.imageUrl)
+                .into(image)
+        }
+    }
+}
