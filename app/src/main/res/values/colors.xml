@@ -10,4 +10,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_green">#32cd32</color>
     <color name="dark_green">#002d40</color>
+    <color name="golden">#ffce00</color>
+    <color name="transparent">#00000000</color>
 </resources>

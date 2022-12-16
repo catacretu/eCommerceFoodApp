@@ -21,14 +21,18 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner,backHandler)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backHandler)
         // Inflate the layout for this fragment
-        _binding = FragmentProductDetailsBinding.inflate(inflater,container,false)
-        binding.toolbar.backButton.setOnClickListener{
+        _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+        binding.toolbar.backButton.setOnClickListener {
             activity?.onBackPressed()
         }
         return binding.root
