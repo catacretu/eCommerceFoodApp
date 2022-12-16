@@ -18,5 +18,9 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.example.ecommercefoodapp.screens.ProductDetailsFragment"
         android:label="fragment_product_details"
-        tools:layout="@layout/fragment_product_details" />
+        tools:layout="@layout/fragment_product_details">
+    <action
+        android:id="@+id/goBackToHomeScreen"
+        app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

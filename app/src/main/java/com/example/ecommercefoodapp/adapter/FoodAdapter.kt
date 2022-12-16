@@ -6,12 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecommercefoodapp.R
 import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
+import com.example.ecommercefoodapp.listener.ItemClickListener
+import com.example.ecommercefoodapp.screens.HomeFragmentDirections
 
-class FoodAdapter(private val itemsList: List<FoodItemEntity>, private val context: Context) :
+class FoodAdapter(
+    private val itemsList: List<FoodItemEntity>,
+    private val context: Context,
+    private val clickListener: ItemClickListener
+    ) :
     RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,6 +44,7 @@ class FoodAdapter(private val itemsList: List<FoodItemEntity>, private val conte
             title.text = item.title
             price.text = item.price
             Glide.with(context).load(item.imageUrl).into(image)
+            itemView.setOnClickListener { clickListener.onClick(item)}
         }
     }
 }

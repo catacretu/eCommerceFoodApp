@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecommercefoodapp.R
 import com.example.ecommercefoodapp.adapter.FoodAdapter
 import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
 import com.example.ecommercefoodapp.databinding.FragmentHomeBinding
+import com.example.ecommercefoodapp.listener.ItemClickListener
 import com.example.ecommercefoodapp.viewmodel.FoodViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +25,13 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    val itemClickListener = object : ItemClickListener {
+        override fun onClick(item: FoodItemEntity) {
+            val action = HomeFragmentDirections.goToProductDetailsFragment()
+            findNavController().navigate(action)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -30,6 +39,11 @@ class HomeFragment : Fragment() {
         val view = binding.root
         initRecyclerView(view)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     override fun onDestroyView() {
@@ -42,7 +56,7 @@ class HomeFragment : Fragment() {
             dataList = t!!
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
             recyclerView.layoutManager = GridLayoutManager(activity, 2)
-            val foodAdapter = FoodAdapter(dataList, view.context)
+            val foodAdapter = FoodAdapter(dataList, view.context, itemClickListener)
             recyclerView.adapter = foodAdapter
         }
     }
