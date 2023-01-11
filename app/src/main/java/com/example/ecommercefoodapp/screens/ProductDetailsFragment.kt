@@ -1,5 +1,6 @@
 package com.example.ecommercefoodapp.screens
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,5 +37,19 @@ class ProductDetailsFragment : Fragment() {
             activity?.onBackPressed()
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.addToCartButton.setOnClickListener {
+           val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
+                sh.edit().apply{
+//                    sh.getString("item_name")
+                    val item_name = binding.title.text.toString()
+                    putString(item_name , "1")
+                }.apply()
+        }
+
     }
 }
