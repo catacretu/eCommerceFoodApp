@@ -43,13 +43,24 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.addToCartButton.setOnClickListener {
-           val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
-                sh.edit().apply{
-//                    sh.getString("item_name")
-                    val item_name = binding.title.text.toString()
-                    putString(item_name , "1")
-                }.apply()
-        }
+            val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
+            val itemName = binding.title.text.toString()
+            var itemQuantity = 0
 
+            sh.edit().apply {
+
+                if (sh.contains(itemName)) {
+                    itemQuantity = sh.getInt(itemName, 0)
+                }
+
+                if (itemQuantity > 0) { // if item exists, we will increase the quantity
+                    itemQuantity++
+                    putInt(itemName, itemQuantity)
+                } else
+                    putInt(itemName, 1) // if  not, we will put it in the cart
+
+            }.apply()
+        }
     }
+
 }
