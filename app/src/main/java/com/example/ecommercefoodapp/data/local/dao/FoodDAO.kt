@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface FoodDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveFood(foodItemList: List<FoodItemEntity>)
 
     @Query("Select * FROM food_table")

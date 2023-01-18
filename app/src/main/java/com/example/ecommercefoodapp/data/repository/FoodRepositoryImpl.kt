@@ -9,14 +9,18 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class FoodRepositoryImpl @Inject constructor(
-    private val foodAPI: FoodAPI, private val foodDAO: FoodDAO
+    private val foodAPI: FoodAPI,
+    private val foodDAO: FoodDAO
 ) : FoodRepository {
 
     override fun getFood(): Single<List<FoodItemEntity>> {
-        return foodAPI.getFood().subscribeOn(Schedulers.io()).map { foodResponseList ->
-            foodResponseList.map { foodResponseItem -> foodResponseItem.toFoodItemEntity() }
-        }.observeOn(Schedulers.io()).doOnSuccess { foodDAO.saveFood(it) }.onErrorResumeNext {
-            foodDAO.getAllFood()
-        }
+        return foodAPI.getFood().subscribeOn(Schedulers.io())
+            .map { foodResponseList ->
+                foodResponseList
+                    .map { foodResponseItem -> foodResponseItem.toFoodItemEntity() }
+            }
+            .observeOn(Schedulers.io())
+            .doOnSuccess { foodDAO.saveFood(it) }
+            .onErrorResumeNext { foodDAO.getAllFood() }
     }
 }

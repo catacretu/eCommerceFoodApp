@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.ecommercefoodapp.databinding.FragmentProductDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,15 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
     private var _binding: FragmentProductDetailsBinding? = null
     private val binding get() = _binding!!
+    private val args: ProductDetailsFragmentArgs by navArgs()
     private val backHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val action = ProductDetailsFragmentDirections.goBackToHomeScreen()
             Navigation.findNavController(requireView()).navigate(action)
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -41,6 +41,8 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initProductDetailsData()
 
         binding.addToCartButton.setOnClickListener {
             val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
@@ -60,7 +62,23 @@ class ProductDetailsFragment : Fragment() {
                     putInt(itemName, 1) // if  not, we will put it in the cart
 
             }.apply()
+            val action = ProductDetailsFragmentDirections.goToCartFragment()
+            findNavController().navigate(action)
         }
+    }
+
+    fun initProductDetailsData() {
+        val foodItem = args.foodItem
+        binding.title.text = foodItem.title
+        Glide.with(binding.root)
+            .load(foodItem.imageUrl)
+            .into(binding.image)
+        binding.price.text = foodItem.price
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

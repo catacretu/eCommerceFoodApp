@@ -11,7 +11,7 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/go_to_productDetailsFragment"
+            android:id="@+id/goToProductDetailsFragmentFromHomeFragment"
             app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
@@ -19,8 +19,23 @@
         android:name="com.example.ecommercefoodapp.screens.ProductDetailsFragment"
         android:label="fragment_product_details"
         tools:layout="@layout/fragment_product_details">
-    <action
-        android:id="@+id/goBackToHomeScreen"
-        app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/goBackToHomeScreen"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="foodItem"
+            app:argType="com.example.ecommercefoodapp.data.local.model.FoodItemEntity" />
+        <action
+            android:id="@+id/goToCartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.ecommercefoodapp.screens.CartFragment"
+        android:label="CartFragment">
+        <action
+            android:id="@+id/goToProductDetailsFragmentFromCartFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

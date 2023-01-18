@@ -6,20 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecommercefoodapp.R
 import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
 import com.example.ecommercefoodapp.listener.ItemClickListener
-import com.example.ecommercefoodapp.screens.HomeFragmentDirections
 
-class FoodAdapter(
+class FoodItemAdapter(
     private val itemsList: List<FoodItemEntity>,
     private val context: Context,
     private val clickListener: ItemClickListener
-    ) :
-    RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
+) :
+    RecyclerView.Adapter<FoodItemAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)

@@ -9,6 +9,7 @@
     <color name="black_50">#80000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_green">#32cd32</color>
+    <color name="status_bar_green">#138713</color>
     <color name="dark_green">#002d40</color>
     <color name="golden">#ffce00</color>
     <color name="transparent">#00000000</color>

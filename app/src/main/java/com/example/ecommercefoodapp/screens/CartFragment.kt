@@ -4,42 +4,53 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecommercefoodapp.R
-import com.example.ecommercefoodapp.adapter.FoodItemAdapter
+import com.example.ecommercefoodapp.adapter.CartItemAdapter
 import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
-import com.example.ecommercefoodapp.databinding.FragmentHomeBinding
+import com.example.ecommercefoodapp.databinding.FragmentCartBinding
 import com.example.ecommercefoodapp.listener.ItemClickListener
 import com.example.ecommercefoodapp.viewmodel.FoodViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class CartFragment : Fragment() {
 
+    private var _binding: FragmentCartBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModels<FoodViewModel>()
     private lateinit var dataList: List<FoodItemEntity>
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
 
+    private val backHandler = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val action = ProductDetailsFragmentDirections.goBackToHomeScreen()
+            Navigation.findNavController(requireView()).navigate(action)
+        }
+    }
     private val itemClickListener = object : ItemClickListener {
         override fun onClick(item: FoodItemEntity) {
-            val action = HomeFragmentDirections.goToProductDetailsFragmentFromHomeFragment(item)
+            val action = CartFragmentDirections.goToProductDetailsFragmentFromCartFragment(item)
             findNavController().navigate(action)
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backHandler)
+        _binding = FragmentCartBinding.inflate(inflater, container, false)
         val view = binding.root
         initRecyclerView(view)
         return view
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -50,10 +61,10 @@ class HomeFragment : Fragment() {
         viewModel.getFoodObserver().observe(viewLifecycleOwner) { t ->
             dataList = t!!
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-            recyclerView.layoutManager = GridLayoutManager(activity, 2)
-            val foodItemAdapter = FoodItemAdapter(dataList, view.context, itemClickListener)
-            recyclerView.adapter = foodItemAdapter
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            val cartItemAdapter = CartItemAdapter(dataList, view.context, itemClickListener)
+            recyclerView.adapter = cartItemAdapter
         }
     }
-}
 
+}
