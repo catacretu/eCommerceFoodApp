@@ -1,5 +1,6 @@
 package com.example.ecommercefoodapp.screens
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,10 +27,11 @@ class CartFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<FoodViewModel>()
     private lateinit var dataList: List<FoodItemEntity>
+    private lateinit var cartItemList: MutableList<FoodItemEntity>
 
     private val backHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val action = ProductDetailsFragmentDirections.goBackToHomeScreen()
+            val action = CartFragmentDirections.goToHomeFragment()
             Navigation.findNavController(requireView()).navigate(action)
         }
     }
@@ -59,12 +61,33 @@ class CartFragment : Fragment() {
 
     private fun initRecyclerView(view: View) {
         viewModel.getFoodObserver().observe(viewLifecycleOwner) { t ->
-            dataList = t!!
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+            dataList = t!!
+            filterCartItemsFromDataList()
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            val cartItemAdapter = CartItemAdapter(dataList, view.context, itemClickListener)
+            val cartItemAdapter =
+                CartItemAdapter(cartItemList.toList(), view.context, itemClickListener)
             recyclerView.adapter = cartItemAdapter
         }
+
+    }
+
+    private fun getItemsFromSharedPreferences(): MutableMap<String, *>? {
+        val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
+        return sh.all
+
+    }
+
+    private fun filterCartItemsFromDataList() {
+        cartItemList = mutableListOf()
+        val shItemsList = getItemsFromSharedPreferences()!!
+        for (item in dataList)
+            for (shItem in shItemsList.entries.iterator()) {
+                if (item.title == shItem.key) {
+                    item.quantity = shItem.value as Int
+                    cartItemList.add(item)
+                }
+            }
     }
 
 }

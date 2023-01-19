@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.ecommercefoodapp.databinding.FragmentProductDetailsBinding
@@ -46,6 +45,7 @@ class ProductDetailsFragment : Fragment() {
 
         binding.addToCartButton.setOnClickListener {
             val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
+//            sh.edit().clear().apply()
             val itemName = binding.title.text.toString()
             var itemQuantity = 0
 
@@ -62,8 +62,6 @@ class ProductDetailsFragment : Fragment() {
                     putInt(itemName, 1) // if  not, we will put it in the cart
 
             }.apply()
-            val action = ProductDetailsFragmentDirections.goToCartFragment()
-            findNavController().navigate(action)
         }
     }
 

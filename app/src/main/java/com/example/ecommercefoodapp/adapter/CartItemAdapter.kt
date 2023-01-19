@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ class CartItemAdapter(
     private val itemsList: List<FoodItemEntity>,
     private val context: Context,
     private val clickListener: ItemClickListener
+
 ) :
     RecyclerView.Adapter<CartItemAdapter.ViewHolder>() {
 
@@ -38,14 +40,15 @@ class CartItemAdapter(
         private val title: TextView = itemView.findViewById(R.id.title)
         private val price: TextView = itemView.findViewById(R.id.price)
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val quantity: EditText = itemView.findViewById(R.id.quantity)
 
         fun bind(item: FoodItemEntity) {
             title.text = item.title
             price.text = item.price
+            quantity.setText(item.quantity.toString())
             Glide.with(context).load(item.imageUrl).into(image)
             image.setOnClickListener { clickListener.onClick(item) }
         }
-
     }
 
 }
