@@ -51,6 +51,7 @@ class CartFragment : Fragment() {
                 val quantity = item.quantity + 1
                 item.quantity = quantity
                 putInt(item.title, quantity)
+                updateTotalAmountPrice(item,"+")
             }.apply()
             cartItemAdapter.notifyDataSetChanged()
         }
@@ -64,6 +65,7 @@ class CartFragment : Fragment() {
                 val quantity = item.quantity - 1
                 item.quantity = quantity
                 putInt(item.title, quantity)
+                updateTotalAmountPrice(item,"-")
             }.apply()
             cartItemAdapter.notifyDataSetChanged()
         }
@@ -91,6 +93,7 @@ class CartFragment : Fragment() {
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
             dataList = t!!
             filterCartItemsFromDataList()
+            binding.totalAmount.text = computeFinalPrice()
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             cartItemAdapter =
                 CartItemAdapter(
@@ -115,5 +118,27 @@ class CartFragment : Fragment() {
                     cartItemList.add(item)
                 }
             }
+    }
+
+    private fun computeFinalPrice(): String {
+        var totalAmount = 0
+        for (item in cartItemList)
+            {var price = extractPrice(item.price)
+                price = price * item.quantity
+            totalAmount+= price}
+        return "$totalAmount lei"
+    }
+
+    private fun extractPrice(price: String): Int {
+       return price.substring(0,price.indexOf(" ")).toInt()
+    }
+
+    private fun updateTotalAmountPrice(item: FoodItemEntity, flagOperator: String){
+        var newPrice = extractPrice(binding.totalAmount.text as String)
+        if(flagOperator.equals("+"))
+            newPrice = newPrice + extractPrice(item.price)
+        else if(flagOperator.equals("-"))
+            newPrice = newPrice - extractPrice(item.price)
+        binding.totalAmount.text = "$newPrice lei"
     }
 }
