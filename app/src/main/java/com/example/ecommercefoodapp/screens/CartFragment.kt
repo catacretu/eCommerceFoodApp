@@ -80,6 +80,10 @@ class CartFragment : Fragment() {
         sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
         val view = binding.root
         initRecyclerView(view)
+        binding.checkout.setOnClickListener {
+            val action = CartFragmentDirections.goToOrderFragment()
+            findNavController().navigate(action)
+        }
         return view
     }
 
