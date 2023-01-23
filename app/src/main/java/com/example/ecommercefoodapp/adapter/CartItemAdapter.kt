@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,9 @@ import com.example.ecommercefoodapp.listener.ItemClickListener
 class CartItemAdapter(
     private val itemsList: List<FoodItemEntity>,
     private val context: Context,
-    private val clickListener: ItemClickListener
+    private val clickListener: ItemClickListener,
+    private val addClickListener: ItemClickListener,
+    private val decreaseClickListener: ItemClickListener
 
 ) :
     RecyclerView.Adapter<CartItemAdapter.ViewHolder>() {
@@ -40,15 +42,18 @@ class CartItemAdapter(
         private val title: TextView = itemView.findViewById(R.id.title)
         private val price: TextView = itemView.findViewById(R.id.price)
         private val image: ImageView = itemView.findViewById(R.id.image)
-        private val quantity: EditText = itemView.findViewById(R.id.quantity)
+        private val quantity: TextView = itemView.findViewById(R.id.quantity)
+        private val addButton: Button = itemView.findViewById(R.id.add_button)
+        private val decreaseButton: Button = itemView.findViewById(R.id.decrease_button)
 
         fun bind(item: FoodItemEntity) {
             title.text = item.title
             price.text = item.price
-            quantity.setText(item.quantity.toString())
+            quantity.text = item.quantity.toString()
             Glide.with(context).load(item.imageUrl).into(image)
             image.setOnClickListener { clickListener.onClick(item) }
+            addButton.setOnClickListener { addClickListener.onClick(item) }
+            decreaseButton.setOnClickListener { decreaseClickListener.onClick(item) }
         }
     }
-
 }

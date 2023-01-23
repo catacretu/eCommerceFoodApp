@@ -1,6 +1,7 @@
 package com.example.ecommercefoodapp.screens
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +27,10 @@ class CartFragment : Fragment() {
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<FoodViewModel>()
+    private lateinit var cartItemAdapter: CartItemAdapter
     private lateinit var dataList: List<FoodItemEntity>
     private lateinit var cartItemList: MutableList<FoodItemEntity>
+    private lateinit var sh: SharedPreferences
 
     private val backHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -42,17 +45,41 @@ class CartFragment : Fragment() {
         }
     }
 
+    private val addClickListener = object : ItemClickListener {
+        override fun onClick(item: FoodItemEntity) {
+            sh.edit().apply {
+                val quantity = item.quantity + 1
+                item.quantity = quantity
+                putInt(item.title, quantity)
+            }.apply()
+            cartItemAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private val decreaseClickListener = object : ItemClickListener {
+        override fun onClick(item: FoodItemEntity) {
+            sh.edit().apply {
+                if (item.quantity == 0)
+                    return
+                val quantity = item.quantity - 1
+                item.quantity = quantity
+                putInt(item.title, quantity)
+            }.apply()
+            cartItemAdapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backHandler)
         _binding = FragmentCartBinding.inflate(inflater, container, false)
+        sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
         val view = binding.root
         initRecyclerView(view)
         return view
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -65,22 +92,22 @@ class CartFragment : Fragment() {
             dataList = t!!
             filterCartItemsFromDataList()
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            val cartItemAdapter =
-                CartItemAdapter(cartItemList.toList(), view.context, itemClickListener)
+            cartItemAdapter =
+                CartItemAdapter(
+                    cartItemList.toList(),
+                    view.context,
+                    itemClickListener,
+                    addClickListener,
+                    decreaseClickListener
+                )
             recyclerView.adapter = cartItemAdapter
         }
 
     }
 
-    private fun getItemsFromSharedPreferences(): MutableMap<String, *>? {
-        val sh = requireActivity().getSharedPreferences("shopping_cart", Context.MODE_PRIVATE)
-        return sh.all
-
-    }
-
     private fun filterCartItemsFromDataList() {
         cartItemList = mutableListOf()
-        val shItemsList = getItemsFromSharedPreferences()!!
+        val shItemsList = sh.all
         for (item in dataList)
             for (shItem in shItemsList.entries.iterator()) {
                 if (item.title == shItem.key) {
@@ -89,5 +116,4 @@ class CartFragment : Fragment() {
                 }
             }
     }
-
 }
