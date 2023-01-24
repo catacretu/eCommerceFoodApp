@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,8 @@ class SummaryFragment : Fragment() {
     private lateinit var dataList: List<FoodItemEntity>
     private lateinit var cartItemList: MutableList<FoodItemEntity>
     private lateinit var sh: SharedPreferences
+    private val args: SummaryFragmentArgs by navArgs()
+
     private val backHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val action = SummaryFragmentDirections.goFromSummaryFragmentToOrderFragment()
@@ -66,6 +69,7 @@ class SummaryFragment : Fragment() {
             val action = SummaryFragmentDirections.goFromSummaryFragmentToDoneFragment()
             findNavController().navigate(action)
         }
+        computeDeliveryAddress()
         initRecyclerView(view)
         return view
     }
@@ -73,6 +77,15 @@ class SummaryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun computeDeliveryAddress() {
+        val orderItem = args.orderItem
+        val orderItemToString = "${orderItem.firstName} ${orderItem.lastName},\n" +
+                "${orderItem.address}\n" +
+                "${orderItem.city}, ${orderItem.phone}, ${orderItem.country}\n" +
+                orderItem.delivery
+        binding.address.text = orderItemToString
     }
 
     private fun initRecyclerView(view: View) {

@@ -79,6 +79,9 @@
         <action
             android:id="@+id/go_from_summaryFragment_to_doneFragment"
             app:destination="@id/doneFragment" />
+        <argument
+            android:name="orderItem"
+            app:argType="com.example.ecommercefoodapp.data.local.model.OrderEntity" />
     </fragment>
     <fragment
         android:id="@+id/doneFragment"

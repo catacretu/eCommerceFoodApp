@@ -30,7 +30,6 @@ class ProductDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backHandler)
-        // Inflate the layout for this fragment
         _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
         binding.toolbar.backButton.setOnClickListener {
             activity?.onBackPressed()

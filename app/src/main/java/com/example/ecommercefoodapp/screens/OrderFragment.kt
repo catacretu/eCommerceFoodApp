@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.example.ecommercefoodapp.R
-import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
+import com.example.ecommercefoodapp.data.local.model.OrderEntity
 import com.example.ecommercefoodapp.databinding.FragmentOrderBinding
-import com.example.ecommercefoodapp.listener.ItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,10 +32,27 @@ class OrderFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backHandler)
         _binding = FragmentOrderBinding.inflate(inflater,container,false)
         binding.continueButton.setOnClickListener {
-            val action = OrderFragmentDirections.goToSummaryFragment()
+            val orderItem = createOrderItem()
+            val action = OrderFragmentDirections.goToSummaryFragment(orderItem)
             findNavController().navigate(action)
         }
         return binding.root
+    }
+
+    private fun createOrderItem(): OrderEntity {
+        return OrderEntity(
+            0,
+            binding.firstName.text.toString(),
+            binding.lastName.text.toString(),
+            binding.email.text.toString(),
+            binding.phone.text.toString(),
+            binding.address.text.toString(),
+            binding.city.text.toString(),
+            binding.country.text.toString(),
+            if(binding.localPickup.isChecked)
+                binding.localPickup.text.toString()
+            else binding.homeDelivery.text.toString()
+        )
     }
 
     override fun onDestroyView() {
