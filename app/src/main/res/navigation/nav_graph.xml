@@ -58,5 +58,36 @@
         <action
             android:id="@+id/go_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/go_to_summaryFragment"
+            app:destination="@id/summaryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="com.example.ecommercefoodapp.screens.SummaryFragment"
+        android:label="fragment_summary"
+        tools:layout="@layout/fragment_summary" >
+        <action
+            android:id="@+id/go_from_summaryFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
+        <action
+            android:id="@+id/go_from_summaryFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/go_from_summaryFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/go_from_summaryFragment_to_doneFragment"
+            app:destination="@id/doneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/doneFragment"
+        android:name="com.example.ecommercefoodapp.screens.DoneFragment"
+        android:label="fragment_done"
+        tools:layout="@layout/fragment_done" >
+        <action
+            android:id="@+id/go_from_done_Fragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
 </navigation>

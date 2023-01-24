@@ -17,9 +17,9 @@ class CartItemAdapter(
     private val itemsList: List<FoodItemEntity>,
     private val context: Context,
     private val clickListener: ItemClickListener,
-    private val addClickListener: ItemClickListener,
-    private val decreaseClickListener: ItemClickListener
-
+    private val addClickListener: ItemClickListener?,
+    private val decreaseClickListener: ItemClickListener?,
+    private val isSummaryScreen: Boolean
 ) :
     RecyclerView.Adapter<CartItemAdapter.ViewHolder>() {
 
@@ -41,8 +41,9 @@ class CartItemAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title: TextView = itemView.findViewById(R.id.title)
         private val price: TextView = itemView.findViewById(R.id.price)
-        private val image: ImageView = itemView.findViewById(R.id.image)
         private val quantity: TextView = itemView.findViewById(R.id.quantity)
+        private val subtotal: TextView = itemView.findViewById(R.id.subtotal)
+        private val image: ImageView = itemView.findViewById(R.id.image)
         private val addButton: Button = itemView.findViewById(R.id.add_button)
         private val decreaseButton: Button = itemView.findViewById(R.id.decrease_button)
 
@@ -50,10 +51,20 @@ class CartItemAdapter(
             title.text = item.title
             price.text = item.price
             quantity.text = item.quantity.toString()
+            subtotal.text = "${(extractPrice(item.price) * item.quantity)} lei"
             Glide.with(context).load(item.imageUrl).into(image)
             image.setOnClickListener { clickListener.onClick(item) }
-            addButton.setOnClickListener { addClickListener.onClick(item) }
-            decreaseButton.setOnClickListener { decreaseClickListener.onClick(item) }
+            if(!isSummaryScreen)
+                {addButton.setOnClickListener { addClickListener?.onClick(item) }
+                decreaseButton.setOnClickListener { decreaseClickListener?.onClick(item) }}
+            else
+            {
+                addButton.visibility = View.INVISIBLE
+                decreaseButton.visibility = View.INVISIBLE
+            }
         }
+    }
+    private fun extractPrice(price: String): Int {
+        return price.substring(0,price.indexOf(" ")).toInt()
     }
 }
