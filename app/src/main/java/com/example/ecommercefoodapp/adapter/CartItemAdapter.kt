@@ -14,7 +14,7 @@ import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
 import com.example.ecommercefoodapp.listener.ItemClickListener
 
 class CartItemAdapter(
-    private val itemsList: List<FoodItemEntity>,
+    val itemsList: MutableList<FoodItemEntity>,
     private val context: Context,
     private val clickListener: ItemClickListener,
     private val addClickListener: ItemClickListener?,

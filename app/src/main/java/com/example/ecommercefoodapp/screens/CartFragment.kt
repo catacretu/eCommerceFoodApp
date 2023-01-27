@@ -59,11 +59,16 @@ class CartFragment : Fragment() {
         override fun onClick(item: FoodItemEntity) {
             sh.edit().apply {
                 if (item.quantity == 1)
-                    return
-                val quantity = item.quantity - 1
-                item.quantity = quantity
-                putInt(item.title, quantity)
-                updateTotalAmountPrice(item,"-")
+                {
+                    cartItemAdapter.itemsList.remove(item)
+                    remove(item.title).apply()
+                }
+                else {
+                    val quantity = item.quantity - 1
+                    item.quantity = quantity
+                    putInt(item.title, quantity)
+                    updateTotalAmountPrice(item, "-")
+                }
             }.apply()
             cartItemAdapter.notifyDataSetChanged()
         }
@@ -98,7 +103,7 @@ class CartFragment : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             cartItemAdapter =
                 CartItemAdapter(
-                    viewModel.cartItemList.toList(),
+                    viewModel.cartItemList,
                     view.context,
                     itemClickListener,
                     addClickListener,

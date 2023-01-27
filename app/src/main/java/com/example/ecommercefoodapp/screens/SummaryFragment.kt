@@ -94,7 +94,7 @@ class SummaryFragment : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             cartItemAdapter =
                 CartItemAdapter(
-                    viewModel.cartItemList.toList(),
+                    viewModel.cartItemList,
                     view.context,
                     itemClickListener,
                     null,
