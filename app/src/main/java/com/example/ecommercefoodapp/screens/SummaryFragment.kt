@@ -31,8 +31,6 @@ class SummaryFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<FoodViewModel>()
     private lateinit var cartItemAdapter: CartItemAdapter
-    private lateinit var dataList: List<FoodItemEntity>
-    private lateinit var cartItemList: MutableList<FoodItemEntity>
     private lateinit var sh: SharedPreferences
     private val args: SummaryFragmentArgs by navArgs()
 
@@ -91,13 +89,12 @@ class SummaryFragment : Fragment() {
     private fun initRecyclerView(view: View) {
         viewModel.getFoodObserver().observe(viewLifecycleOwner) { t ->
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-            dataList = t!!
-            filterCartItemsFromDataList()
-            binding.amountTotal.text = computeFinalPrice()
+            viewModel.filterCartItemsFromDataList(requireActivity())
+            binding.amountTotal.text = viewModel.computeFinalPrice()
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             cartItemAdapter =
                 CartItemAdapter(
-                    cartItemList.toList(),
+                    viewModel.cartItemList.toList(),
                     view.context,
                     itemClickListener,
                     null,
@@ -106,30 +103,5 @@ class SummaryFragment : Fragment() {
                 )
             recyclerView.adapter = cartItemAdapter
         }
-    }
-
-    private fun filterCartItemsFromDataList() {
-        cartItemList = mutableListOf()
-        val shItemsList = sh.all
-        for (item in dataList)
-            for (shItem in shItemsList.entries.iterator()) {
-                if (item.title == shItem.key) {
-                    item.quantity = shItem.value as Int
-                    cartItemList.add(item)
-                }
-            }
-    }
-
-    private fun computeFinalPrice(): String {
-        var totalAmount = 0
-        for (item in cartItemList)
-        {var price = extractPrice(item.price)
-            price = price * item.quantity
-            totalAmount+= price}
-        return "$totalAmount lei"
-    }
-
-    private fun extractPrice(price: String): Int {
-        return price.substring(0,price.indexOf(" ")).toInt()
     }
 }

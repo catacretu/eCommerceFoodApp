@@ -28,8 +28,6 @@ class CartFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<FoodViewModel>()
     private lateinit var cartItemAdapter: CartItemAdapter
-    private lateinit var dataList: List<FoodItemEntity>
-    private lateinit var cartItemList: MutableList<FoodItemEntity>
     private lateinit var sh: SharedPreferences
 
     private val backHandler = object : OnBackPressedCallback(true) {
@@ -95,13 +93,12 @@ class CartFragment : Fragment() {
     private fun initRecyclerView(view: View) {
         viewModel.getFoodObserver().observe(viewLifecycleOwner) { t ->
             val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-            dataList = t!!
-            filterCartItemsFromDataList()
-            binding.totalAmount.text = computeFinalPrice()
+            viewModel.filterCartItemsFromDataList(requireActivity())
+            binding.totalAmount.text = viewModel.computeFinalPrice()
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             cartItemAdapter =
                 CartItemAdapter(
-                    cartItemList.toList(),
+                    viewModel.cartItemList.toList(),
                     view.context,
                     itemClickListener,
                     addClickListener,
@@ -113,37 +110,12 @@ class CartFragment : Fragment() {
 
     }
 
-    private fun filterCartItemsFromDataList() {
-        cartItemList = mutableListOf()
-        val shItemsList = sh.all
-        for (item in dataList)
-            for (shItem in shItemsList.entries.iterator()) {
-                if (item.title == shItem.key) {
-                    item.quantity = shItem.value as Int
-                    cartItemList.add(item)
-                }
-            }
-    }
-
-    private fun computeFinalPrice(): String {
-        var totalAmount = 0
-        for (item in cartItemList)
-            {var price = extractPrice(item.price)
-                price = price * item.quantity
-            totalAmount+= price}
-        return "$totalAmount lei"
-    }
-
-    private fun extractPrice(price: String): Int {
-       return price.substring(0,price.indexOf(" ")).toInt()
-    }
-
     private fun updateTotalAmountPrice(item: FoodItemEntity, flagOperator: String){
-        var newPrice = extractPrice(binding.totalAmount.text as String)
+        var newPrice = viewModel.extractPrice(binding.totalAmount.text as String)
         if(flagOperator.equals("+"))
-            newPrice = newPrice + extractPrice(item.price)
+            newPrice = newPrice + viewModel.extractPrice(item.price)
         else if(flagOperator.equals("-"))
-            newPrice = newPrice - extractPrice(item.price)
+            newPrice = newPrice - viewModel.extractPrice(item.price)
         binding.totalAmount.text = "$newPrice lei"
     }
 }
