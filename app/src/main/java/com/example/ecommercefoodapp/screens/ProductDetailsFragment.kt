@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -59,14 +60,16 @@ class ProductDetailsFragment : Fragment() {
                     putInt(itemName, itemQuantity)
                 } else
                     putInt(itemName, 1) // if  not, we will put it in the cart
-
             }.apply()
+            Toast.makeText(context,"Produsul a fost adaugat cu succes!",Toast.LENGTH_SHORT).show()
         }
     }
 
     fun initProductDetailsData() {
         val foodItem = args.foodItem
         binding.title.text = foodItem.title
+        binding.description.text = foodItem.description
+        binding.ratingBar.rating = foodItem.rating
         Glide.with(binding.root)
             .load(foodItem.imageUrl)
             .into(binding.image)

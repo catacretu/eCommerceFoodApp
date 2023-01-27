@@ -83,7 +83,7 @@ class SummaryFragment : Fragment() {
         val orderItem = args.orderItem
         val orderItemToString = "${orderItem.firstName} ${orderItem.lastName},\n" +
                 "${orderItem.address}\n" +
-                "${orderItem.city}, ${orderItem.phone}, ${orderItem.country}\n" +
+                "${orderItem.city}, ${orderItem.phone}, ${orderItem.county}\n" +
                 orderItem.delivery
         binding.address.text = orderItemToString
     }

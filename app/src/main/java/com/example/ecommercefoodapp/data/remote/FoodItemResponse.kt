@@ -3,9 +3,9 @@ package com.example.ecommercefoodapp.data.remote
 import com.example.ecommercefoodapp.data.local.model.FoodItemEntity
 
 data class FoodItemResponse(
-    val id: Int, val title: String, val price: String, val imageUrl: String
+    val id: Int, val title: String, val price: String, val imageUrl: String, val description: String, val rating: Float
 )
 
 fun FoodItemResponse.toFoodItemEntity() = FoodItemEntity(
-    foodID = id, title = title, price = price, imageUrl = imageUrl
+    foodID = id, title = title, price = price, imageUrl = imageUrl, description = description, rating = rating
 )

@@ -48,7 +48,7 @@ class OrderFragment : Fragment() {
             binding.phone.text.toString(),
             binding.address.text.toString(),
             binding.city.text.toString(),
-            binding.country.text.toString(),
+            binding.county.text.toString(),
             if(binding.localPickup.isChecked)
                 binding.localPickup.text.toString()
             else binding.homeDelivery.text.toString()

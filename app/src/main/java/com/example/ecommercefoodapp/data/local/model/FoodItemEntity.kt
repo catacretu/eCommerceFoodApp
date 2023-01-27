@@ -10,6 +10,8 @@ class FoodItemEntity(
     val foodID: Int,
     val title: String,
     val price: String,
+    val description: String,
     val imageUrl: String,
+    val rating: Float,
     var quantity: Int = 0
 ) : Serializable
